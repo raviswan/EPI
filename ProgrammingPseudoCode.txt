@@ -1,0 +1,453 @@
+C++
+
+Constructors of any kind : no return value
+--------------------------------------------
+COPY CONSTRUCTOR -(important to have const)
+
+MyClass(const MyClass& other){
+	deepCopy()
+}
+
+--------------------------------------------
+ASSIGNMENT OPERATOR - (note: where const is, why return has no const and returning *this)
+
+MyClass& operator=(const MyClass& other){
+	if(this == &other)
+		return *this;
+	else{
+		processing;
+		return *this;
+	}
+}
+
+--------------------------------------------
+INHERITANCE -Remember protected is to help derived classes access base member variables.
+class Vehicle{
+	public:
+		virtual bool drive();
+		virtual ~Vehicle();
+	protected:
+		int der;
+	private:
+		int priv;
+
+	
+}
+class Car:public Vehicle{
+	virtual bool drive(){
+		der = val;
+	}
+	virtual ~Car();	
+}
+
+--------------------------------------------
+DIAMOND PROBLEM with multiple inheritance. Solve with virtual base class while inheriting classes 
+with common parent.
+
+--------------------------------------------
+EXCEPTION: remember stack unwinds until you find matching catch. If not, program aborts
+try{
+	throw something;
+}
+/*catch all*/
+catch(...){
+	
+}
+--------------------------------------------
+SHARED,WEAK AND UNIQUE_PTR
+Shared_ptr and weak_ptr: creates managed object and manager object. The latter keeps track of
+the shared_ptr count and weak_ptr count. When shared_ptr count goes to zero,
+the actual object (ie.managed object is deleted), but manager object sticks around.
+That is only deleted when weak pointer goes to zero.
+
+Unique_ptr: Only one can own the object at any given time. No copy constructors and 
+copy assignment allowed.For passing as function argument, use pass by reference.
+Transferring ownership of unique pointer is done by std::move 
+Move constructor and move assignment operator are defined for uniqe pointer
+
+unique_ptr<Thing> p1(new Thing); // p1 owns the Thing
+unique_ptr<Thing> p2; // p2 owns nothing
+// invoke move assignment explicitly
+p2 = std::move(p1); // now p2 owns it, p1 owns nothing
+// invoke move construction explicitly
+unique_ptr<Thing> p3(std::move(p2)); // now p3 owns it, p2 and p1 own nothing
+
+
+--------------------------------------------
+Virtual Function Table (VFT)
+	-  IMPORTANT: 1 VFT per class. But every object will have a "vptr" pointing to its class' VFT entry 
+	-  VFT is stored in static area of a program.
+	- Anytime you create object in heap, there will be vptr prefixed to the object that points to VFT entry for that 
+		class.
+	- So invoking right function  with base pointer is matter of using vptr and right offset into the VFT table entry
+	- the functions are arranged in such a way there is functions with same name are at same offsets in VFT
+	-Refer to Favorited StackOverflow page for multiple inheritance
+-----------------------------------------------------
+
+
+/*Depth First Search*/
+class Graph{
+	Node[] nodes;
+}
+class Node{
+	string name;
+	Node[] adjacent;
+}
+void dfs(node* root){
+	if (root==NULL)
+		return;
+	visit(root);
+	root.visited = true
+	(for each n in adj. root.adjacent){
+		if(n.visted = false)
+			dfs(n)
+	}
+
+}
+
+--------------------------------------------
+/*Breadth First Search*/
+void bfs(node* root){
+	if(root==NULL)
+		return;
+	visit(root);
+	root.visited= true
+	for each n in root.adjacent{
+		enqueue(n);
+	}
+	while(queue not empty){
+		top = dequeue;
+		visit(top);
+		top.visited = true
+		for each n in top.adjacent
+			if(n.visited = false)
+				enqueue(n);
+
+	}
+
+}
+
+--------------------------------------------
+/*compute height of a tree*/
+int treeHeight(Node root){
+		if(root==null)return 0;
+		return (1+ std::max(treeHeight(root.left),treeHeight(root.right)));
+	}
+
+--------------------------------------------
+//counting number of 1s in a number
+while ((num = (num & (num-1))) != 0){
+	count++;
+}
+
+
+/*C++ linked list*/
+template <typename T>
+struct ListNode{
+	T data;
+	shared_ptr<ListNode<T>> next;
+
+}
+--------------------------------------------
+/*removing duplicates from a list. O(n^2)*/
+checkDup(Node* root){
+	Node* current = root;
+	Node* runner;
+	while(current!= null){
+		runner = current;
+		while(runner.next != null){
+			if(runner.next.data==current.data){
+				runner.next = runner.next.next
+			}
+			else{
+				runner = runner.next
+			}
+			
+
+		}
+		current = current.next
+	}
+}
+--------------------------------------------
+
+
+/*checking for loop in a list*/
+checkLoopInList(Node* root){
+	Node* fast = head;
+	Node* slow = fast;
+
+
+	while(fast != NULL && fast.next != NULL){
+		slow = slow.next;
+		fast = fast.next.next;
+		if(slow==fast)
+			break;
+	}
+	if(fast == NULL|| fast.next == NULL)
+		return false;
+	slow = head;
+	while(slow!=fast){
+		slow= slow.next
+		fast= fast.next
+	}
+	return fast;
+}
+
+
+--------------------------------------------
+
+/*return kth to last element of list*/
+Node* returnKthElement(Node* root,int k,int &val){
+	if root==NULL{
+		val = 0;
+		return NULL;
+	}
+	
+	Node* node  = returnKthElement(root->next,k,val);
+	val = val+1;
+	if(val == k)
+		return root;
+	return node;
+	
+}
+Node* returnKthElement(Node* root,int k){
+	int val= 0
+	return returnKthElement(root,k,val);
+}
+
+--------------------------------------------
+
+int fibonacci(int n){
+	if (n==0)
+		return 0;
+	if(n==1)
+		return 1;
+	return fibnoacci(n-1)+ fibonacci(n-2)
+
+}
+
+------------------------------------------------
+
+int fibonacci(int n){
+	return fibonacci(n,new int[n+1]);
+}
+int fibonacci(int n,int* memo){
+	if(n==0 || n==1)
+		return n;
+	if(memo[n] == 0){
+		memo[n] = fibonacci(n-1,memo) + fibonacci(n-2,memo);
+	}
+	return memo[n];
+}
+
+--------------------------------------------
+
+TreeNode createMinBST(arr[],int start, int end){
+	int mid =start+end/2;
+	Treenode n = new (arr[mid]);
+	n.left = createMinBST(arr,start,mid-1);
+	n.right = createMinBST(arr,mid+1,end);
+	return n;
+
+}
+------------------------------------------------
+Node getNext(Node n){
+	if (n==NULL)
+		return NULL;
+
+	if(n.right!= NULL){
+		return dgetleftMostNode(n.right);
+	}
+	else{
+		current = n;
+		p = n.parent;
+		while(p!=NULL && p.left != current){
+			current = p;
+			p = p.parent;
+		}
+
+		return p;
+	}
+
+	
+}
+char *p =  new char[5];
+int* pi = new int[4];
+delete []pi;
+
+std::unique_ptr<Foo> p1(new Foo(42));
+std::shared_ptr<int> sp(new int);
+v.push_back(p1);
+Foo* p = new Foo(42);
+
+-------------------------------------------
+template<typename T>
+class SmartPointer{
+	
+	SmartPointer(T* p){
+		ptr = p;
+		refCount = malloc(sizeof(usigned int));
+		*refCount = 1;
+	}
+
+	SmartPointer(SmartPointer<T> &sp){
+		this.ptr = sp.ptr
+		ref_count = sp.ref_count
+		++(*refCount);
+	}
+
+	SmartPointer<T> operator=(SmartPointer<T> &sp){
+		if(this == &sp)
+			return *this;
+		if(*refCount > 0)
+			remove();
+		}
+		this.ptr = sp.ptr
+		ref_count = sp.ref_count
+		++(*refCount);
+	}
+
+	void remove(){
+		
+			(*refCount)--;
+			if(refCount==0){
+				delete ptr;
+				free(refCount);
+			}
+	}
+
+	}
+	private:
+		T* ptr;
+		unsigned int* refCount;
+	
+
+}
+
+std::map<string,int> mMap;
+mMap["Ram"] = 1;
+mMap.erase()
+mMap.find()
+Mmpa.size()
+mMap.empty()
+mMap.begin()->first()  //key
+mMap.begin()->second() //value
+
+std::map<int,string>::iterator i;
+mMap.
+class Stack{
+	std::vector<Foo> v;
+	for(std::vector<Foo>::iterator i=v.begin();i !=v.end(); i++){
+		cout<<*i<<endl;
+
+
+
+quickSort(int*a, int left, int right){
+	int pivot = a[left+right/2];
+	int i = left;
+	int j = right;
+	while(i<=j){
+		while(a[i]<=pivot)
+			i++;
+		while(a[j]>=pivot)
+			j--;
+		if(i<j)
+			swap them;
+
+	}
+	while(j>left)
+		quicksort(a,left,j);
+	while(i<right)
+		quicksort(a,i,right);
+	}
+}
+
+binarySearch(int[] a, int x){
+	int low = 0;
+	int high = a.length()-1
+	int mid = low+high /2
+	while(low<=high){
+		if x>a[mid]
+			binarySearch(a,mid+1,high);
+		else
+	}
+}
+
+
+------------------------------------------------
+MERGING TWO LISTS
+------------------------------------------------
+	-Create a shared pointer to new dummy_node, and have a 'tail' point to it.
+	-call MergeNode(&lowestValueNode,&tail) when both lists have non-NULL nodes .
+	Plese make sure you pass pointers to shared pointers.
+	- Make tail point to non-NULL node once you are out of MergeNode()
+	-return dummy_node->next;
+
+------------------------------------------------
+Reversing a list
+------------------------------------------------
+	-Use prev = nullptr, curr = root ; one_ahead=curr->next; Compute one_ahead
+	- Compute logic using a  middle node with node on either side. And extend it for first node
+	- return prev.
+
+
+------------------------------------------------
+       BST
+------------------------------------------------
+
+
+------------------------------------------------
+Checking if tree is BST
+------------------------------------------------
+- Always check for nullptr first
+- Return false  if node->data is < LOWEST (OR)  > HIGHEST
+- return (checkBST(node->left,min,root->data) && checkBST(node->right,root->data,max) )
+
+-------------------------------------------------------------
+First occurence of a key in a BST
+-------------------------------------------------------------
+1) Always check for nullptr first
+2) If key matches, recurse left of the tree. 
+3) return searchBST(root->data < key ? root->right: root->left , key)
+
+1)In iterative, store the parent value, and call left child when there's key match. 
+2) Handle < key  and  > key cases separately.
+
+-------------------------------------------------------------
+Next largest key in a BST 
+-------------------------------------------------------------
+parent = nullptr; curr = root;
+Look from subtree perspective.
+If subtree value > key, save current as parent, and move current to left child
+If subtree value <= key, we don't care  so we keep moving to right.
+return parent's data when you exit the loop
+
+-------------------------------------------------------------
+INSERITION of KEY IN BST:
+-------------------------------------------------------------
+prev=nullptr; curr = root.
+keep moving left or right until curr = nullptr.
+ check whether node needs to be right or left of parent.
+
+-------------------------------------------------------------
+DELETION of KEY IN BST:
+-------------------------------------------------------------
+1.prev=nullptr; curr = root;
+2. keep moving left or right until curr = nullptr or curr= key
+3 If curr = nullptr, return false.
+4. else, if curr has right node,  pick the leftmost of the right subtree, and replace 
+the value of curr with that of leftmost node. here logic:  rParent = curr; child = curr->right
+5. else, if curr has no right node: 
+	a) if curr is root, replace root with curr->left
+	b)  take curr->left and assign it to either right or left of parent.
+ 
+
+-------------------------------------------------------------
+K LARGEST ELEMENTS IN BST:
+-------------------------------------------------------------
+Create a vector to store the K elements.
+Use recursion as follows: recurse right, visit(node), recurse left,
+Remmeber to check the size of vector before making a call to right, and left
+Create a vector to store these values inside a func
+call  fn(root,vec,k)
+if()
