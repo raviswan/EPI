@@ -33,7 +33,7 @@ public:
 				}
 			}
 			std::unique_ptr<BSTNode<int>> newNode(new BSTNode<int>{key, nullptr,nullptr});
-			key > curr->data ? (curr->right = std::move(newNode)) : (curr->left = std::move(newNode));
+			key > parent->data ? (parent->right = std::move(newNode)) : (parent->left = std::move(newNode));
 		}
 		return true;
 	}
@@ -42,37 +42,46 @@ public:
 		if (root==nullptr)
 			return false;
 		BSTNode<int>* curr = root.get();
-		BSTNode<int>* parent = curr;
-		while(curr){
-			if(key < curr->data) {
-				parent = curr;
-				curr = curr->left.get();
-			}
-			else if(key > curr->data){
-				parent = curr;
-				curr = curr->right.get();
+		BSTNode<int>* parent = nullptr;
+		while(curr != nullptr && curr->data != key){
+			parent = curr;
+			curr = key < curr->data ? curr->left.get() : curr->right.get() ;
+		}
+		if(!curr)
+			return false;
+
+		if(curr->right){
+			BSTNode<int>* rParent = curr;
+			BSTNode<int>* child = rParent->right.get();
+			while(child->left){
+				rParent = child;
+				child = child->left.get();
+			}	
+			curr->data = child->data;
+			if(rParent->left.get()_== child) {
+				rParent->left.reset(child->right.release());
 			}
 			else{
-				if(curr->left){
-					while(curr->left){
-						curr->data = curr->left->data;
-						curr = curr->left.get();
-					}
-					delete(curr);
-				}
-				else if(curr->right){
-					curr->data = curr->right->data;
-					curr = curr->right.get();
-					while(curr){
-						curr->data = curr->left->data;
-						curr = curr->left.get();
-					}
-					delete curr;
-				}
-				return true;
-			}			
-		return false;
+				rParent->right.reset(child->right.release());
+			}
+		}
+		//root is key
+		else{
+			if (curr == root.get()){
+				root.reset(curr->left.release());
+			}
+			else {
+				if(curr->data < parent->data)
+					parent->left.reset(curr->left.release());
+				else
+					parent->right.reset(curr->left.release());
+			}
+			
+		}
+		return true;
 	}
+	
+
 };
 
 int main(int argc, char const *argv[])
