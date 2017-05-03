@@ -1,379 +1,108 @@
-C++
-
-Constructors of any kind : no return value
---------------------------------------------
-COPY CONSTRUCTOR -(important to have const)
-
-MyClass(const MyClass& other){
-	deepCopy()
-}
-
---------------------------------------------
-ASSIGNMENT OPERATOR - (note: where const is, why return has no const and returning *this)
-
-MyClass& operator=(const MyClass& other){
-	if(this == &other)
-		return *this;
-	else{
-		processing;
-		return *this;
-	}
-}
-
---------------------------------------------
-INHERITANCE -Remember protected is to help derived classes access base member variables.
-class Vehicle{
-	public:
-		virtual bool drive();
-		virtual ~Vehicle();
-	protected:
-		int der;
-	private:
-		int priv;
-
-	
-}
-class Car:public Vehicle{
-	virtual bool drive(){
-		der = val;
-	}
-	virtual ~Car();	
-}
-
---------------------------------------------
-DIAMOND PROBLEM with multiple inheritance. Solve with virtual base class while inheriting classes 
-with common parent.
-
---------------------------------------------
-EXCEPTION: remember stack unwinds until you find matching catch. If not, program aborts
-try{
-	throw something;
-}
-/*catch all*/
-catch(...){
-	
-}
---------------------------------------------
-SHARED,WEAK AND UNIQUE_PTR
-Shared_ptr and weak_ptr: creates managed object and manager object. The latter keeps track of
-the shared_ptr count and weak_ptr count. When shared_ptr count goes to zero,
-the actual object (ie.managed object is deleted), but manager object sticks around.
-That is only deleted when weak pointer goes to zero.
-
-Unique_ptr: Only one can own the object at any given time. No copy constructors and 
-copy assignment allowed.For passing as function argument, use pass by reference.
-Transferring ownership of unique pointer is done by std::move 
-Move constructor and move assignment operator are defined for uniqe pointer
-
-unique_ptr<Thing> p1(new Thing); // p1 owns the Thing
-unique_ptr<Thing> p2; // p2 owns nothing
-// invoke move assignment explicitly
-p2 = std::move(p1); // now p2 owns it, p1 owns nothing
-// invoke move construction explicitly
-unique_ptr<Thing> p3(std::move(p2)); // now p3 owns it, p2 and p1 own nothing
-
-
---------------------------------------------
-Virtual Function Table (VFT)
-	-  IMPORTANT: 1 VFT per class. But every object will have a "vptr" pointing to its class' VFT entry 
-	-  VFT is stored in static area of a program.
-	- Anytime you create object in heap, there will be vptr prefixed to the object that points to VFT entry for that 
-		class.
-	- So invoking right function  with base pointer is matter of using vptr and right offset into the VFT table entry
-	- the functions are arranged in such a way there is functions with same name are at same offsets in VFT
-	-Refer to Favorited StackOverflow page for multiple inheritance
------------------------------------------------------
-
-
-/*Depth First Search*/
-class Graph{
-	Node[] nodes;
-}
-class Node{
-	string name;
-	Node[] adjacent;
-}
-void dfs(node* root){
-	if (root==NULL)
-		return;
-	visit(root);
-	root.visited = true
-	(for each n in adj. root.adjacent){
-		if(n.visted = false)
-			dfs(n)
-	}
-
-}
-
---------------------------------------------
-/*Breadth First Search*/
-void bfs(node* root){
-	if(root==NULL)
-		return;
-	visit(root);
-	root.visited= true
-	for each n in root.adjacent{
-		enqueue(n);
-	}
-	while(queue not empty){
-		top = dequeue;
-		visit(top);
-		top.visited = true
-		for each n in top.adjacent
-			if(n.visited = false)
-				enqueue(n);
-
-	}
-
-}
-
---------------------------------------------
-/*compute height of a tree*/
-int treeHeight(Node root){
-		if(root==null)return 0;
-		return (1+ std::max(treeHeight(root.left),treeHeight(root.right)));
-	}
-
---------------------------------------------
-//counting number of 1s in a number
-while ((num = (num & (num-1))) != 0){
-	count++;
-}
-
-
-/*C++ linked list*/
-template <typename T>
-struct ListNode{
-	T data;
-	shared_ptr<ListNode<T>> next;
-
-}
---------------------------------------------
-/*removing duplicates from a list. O(n^2)*/
-checkDup(Node* root){
-	Node* current = root;
-	Node* runner;
-	while(current!= null){
-		runner = current;
-		while(runner.next != null){
-			if(runner.next.data==current.data){
-				runner.next = runner.next.next
-			}
-			else{
-				runner = runner.next
-			}
-			
-
-		}
-		current = current.next
-	}
-}
---------------------------------------------
-
-
-/*checking for loop in a list*/
-checkLoopInList(Node* root){
-	Node* fast = head;
-	Node* slow = fast;
-
-
-	while(fast != NULL && fast.next != NULL){
-		slow = slow.next;
-		fast = fast.next.next;
-		if(slow==fast)
-			break;
-	}
-	if(fast == NULL|| fast.next == NULL)
-		return false;
-	slow = head;
-	while(slow!=fast){
-		slow= slow.next
-		fast= fast.next
-	}
-	return fast;
-}
-
-
---------------------------------------------
-
-/*return kth to last element of list*/
-Node* returnKthElement(Node* root,int k,int &val){
-	if root==NULL{
-		val = 0;
-		return NULL;
-	}
-	
-	Node* node  = returnKthElement(root->next,k,val);
-	val = val+1;
-	if(val == k)
-		return root;
-	return node;
-	
-}
-Node* returnKthElement(Node* root,int k){
-	int val= 0
-	return returnKthElement(root,k,val);
-}
-
---------------------------------------------
-
-int fibonacci(int n){
-	if (n==0)
-		return 0;
-	if(n==1)
-		return 1;
-	return fibnoacci(n-1)+ fibonacci(n-2)
-
-}
 
 ------------------------------------------------
-
-int fibonacci(int n){
-	return fibonacci(n,new int[n+1]);
-}
-int fibonacci(int n,int* memo){
-	if(n==0 || n==1)
-		return n;
-	if(memo[n] == 0){
-		memo[n] = fibonacci(n-1,memo) + fibonacci(n-2,memo);
-	}
-	return memo[n];
-}
-
---------------------------------------------
-
-TreeNode createMinBST(arr[],int start, int end){
-	int mid =start+end/2;
-	Treenode n = new (arr[mid]);
-	n.left = createMinBST(arr,start,mid-1);
-	n.right = createMinBST(arr,mid+1,end);
-	return n;
-
-}
+     1 .  ARRAYS
 ------------------------------------------------
-Node getNext(Node n){
-	if (n==NULL)
-		return NULL;
 
-	if(n.right!= NULL){
-		return dgetleftMostNode(n.right);
+------------------------------------------------
+REMOVING A SPECIFIC KEY from array in O(n) time and O(1) space
+------------------------------------------------
+Maintain a separate index that tracks the loop index for the vector.
+  if(v[i] != key) 
+  	v[index++] = v[i]
+
+return index 
+
+------------------------------------------------
+REMOVING DUPLICATES from sorted array in O(n) time and O(1) space
+------------------------------------------------
+Maintain a separate index that tracks the loop index for the vector.
+  if(v[i] != v[i-1]) 
+  	v[index++] = v[i]
+
+return index 
+
+------------------------------------------------
+DICTIONARY ORDERING
+------------------------------------------------
+- The  very last element of the dictionary order is all elements in descending order
+
+- So look for case when a[k]> a[k+1] and all after k are in descending order
+- pick the element from the descending order higher than a[k]. Swap it
+- Reverse the descending ordered part, i.e. after a[k]
+
+
+------------------------------------------------
+     2 .  STRING
+------------------------------------------------
+For strings remmeber to use for(char& c: s)
+
+------------------------------------------------
+Palindrome string
+------------------------------------------------
+Two indices: at start and end. 
+Use isaplhanum() and tolower()
+
+------------------------------------------------
+Reverse sentence
+------------------------------------------------
+-3 calls to reverse()
+
+-Reverse the whole sentence using reverse()
+-then reverse one word at a time. use 
+	while(end = s.find(" ",start) != string:npos)
+		reverse(s.begin()+start,s.begin()+end)
+		start= end+1;
+-
+reverse(s.begin()+start,s.end())
+
+
+------------------------------------------------
+RunLength Encoding/Decoding
+------------------------------------------------
+aaabbbc= 3a3b1c
+
+- Use a second string to copy the results over. like this:
+	results += 
+
+- to_string(integer) and is_digit(char)
+
+
+------------------------------------------------
+Character substitution and removal
+------------------------------------------------
+Eg. replace a with dd and remove all b
+
+-First pass count all 'a', while removing b. Overwrite in the same space.
+- now do s.resize(idx + a_cnt)
+- Then start from the end, and keep moving towards the start replacing all 
+occurences of a with 'dd'
+
+------------------------------------------------
+Phone number combo
+------------------------------------------------
+For 1234, enumerate all character combo
+
+-Use recursion:
+- use std:array to store the 10 keypad mappings.
+- From string input, get the index into the phone array and use that phone_char_grouping
+
+getPhoneLetter(string s, vecotor<string>* v, string res,index){
+	if(i==s.size()){
+		vec->push_back(res);
+		return;
 	}
-	else{
-		current = n;
-		p = n.parent;
-		while(p!=NULL && p.left != current){
-			current = p;
-			p = p.parent;
-		}
-
-		return p;
-	}
-
-	
-}
-char *p =  new char[5];
-int* pi = new int[4];
-delete []pi;
-
-std::unique_ptr<Foo> p1(new Foo(42));
-std::shared_ptr<int> sp(new int);
-v.push_back(p1);
-Foo* p = new Foo(42);
-
--------------------------------------------
-template<typename T>
-class SmartPointer{
-	
-	SmartPointer(T* p){
-		ptr = p;
-		refCount = malloc(sizeof(usigned int));
-		*refCount = 1;
-	}
-
-	SmartPointer(SmartPointer<T> &sp){
-		this.ptr = sp.ptr
-		ref_count = sp.ref_count
-		++(*refCount);
-	}
-
-	SmartPointer<T> operator=(SmartPointer<T> &sp){
-		if(this == &sp)
-			return *this;
-		if(*refCount > 0)
-			remove();
-		}
-		this.ptr = sp.ptr
-		ref_count = sp.ref_count
-		++(*refCount);
-	}
-
-	void remove(){
-		
-			(*refCount)--;
-			if(refCount==0){
-				delete ptr;
-				free(refCount);
-			}
-	}
-
-	}
-	private:
-		T* ptr;
-		unsigned int* refCount;
-	
-
-}
-
-std::map<string,int> mMap;
-mMap["Ram"] = 1;
-mMap.erase()
-mMap.find()
-Mmpa.size()
-mMap.empty()
-mMap.begin()->first()  //key
-mMap.begin()->second() //value
-
-std::map<int,string>::iterator i;
-mMap.
-class Stack{
-	std::vector<Foo> v;
-	for(std::vector<Foo>::iterator i=v.begin();i !=v.end(); i++){
-		cout<<*i<<endl;
-
-
-
-quickSort(int*a, int left, int right){
-	int pivot = a[left+right/2];
-	int i = left;
-	int j = right;
-	while(i<=j){
-		while(a[i]<=pivot)
-			i++;
-		while(a[j]>=pivot)
-			j--;
-		if(i<j)
-			swap them;
-
-	}
-	while(j>left)
-		quicksort(a,left,j);
-	while(i<right)
-		quicksort(a,i,right);
-	}
-}
-
-binarySearch(int[] a, int x){
-	int low = 0;
-	int high = a.length()-1
-	int mid = low+high /2
-	while(low<=high){
-		if x>a[mid]
-			binarySearch(a,mid+1,high);
-		else
-	}
+	index = i;
+	for(char&c : phone_char_grouping)
+		i=index;
+		res[i] = c
+		getPhoneLetter(vec,res,s,i++)
 }
 
 
+
+------------------------------------------------
+     3 .  LISTS
+------------------------------------------------
 ------------------------------------------------
 MERGING TWO LISTS
 ------------------------------------------------
@@ -423,6 +152,31 @@ If subtree value <= key, we don't care  so we keep moving to right.
 return parent's data when you exit the loop
 
 -------------------------------------------------------------
+K LARGEST ELEMENTS IN BST:
+-------------------------------------------------------------
+Create a vector to store the K elements.
+Call Helper function passing in vec, k and root
+Check tree for null and recurse all the way to the right.
+Check vector size before pushing tree->data and recurse left by calling tree->left.
+Remember to check the size of vector before making a call to right, and left
+
+-------------------------------------------------------------
+LOWEST COMMON ANCESTOR (LCA) of two unique elements IN BST
+-------------------------------------------------------------
+- Consider s to be smaller of the two, b to be larger of the two
+- Three while loops
+-  when root is not between a&b, traverse left or right depending on
+ if it <s or > b.
+ In other words,
+- 	while (tree->data < s  || tree->data > b){
+		while(tree->data < s)
+			tree = tree->right.get();
+		while(tree->data > b)
+			tree = tree->left.get();
+	}
+	return tree;
+
+-------------------------------------------------------------
 INSERITION of KEY IN BST:
 -------------------------------------------------------------
 prev=nullptr; curr = root.
@@ -441,13 +195,43 @@ the value of curr with that of leftmost node. here logic:  rParent = curr; child
 	a) if curr is root, replace root with curr->left
 	b)  take curr->left and assign it to either right or left of parent.
  
+-------------------------------------------------------------
+CONSTRUCT TREE FROM GIVEN PRE-TRAVERSAL SEQUENECE
+-------------------------------------------------------------
+HINT: User BST Tree check approach
+1.Please note given an in-order traversal, you can get a unique tree structure. Take,{1,2,3}
+2. For pre-order traversal, there's a unique sequence.
+3. Follow the approach of BST check by using min and max bounds for every recursive call.
+	buildTree(){
+		index = 0;
+		return buildTreeHelper(vec,lower_bound,upper_bound,&index)
+	}
+4. Key here is to pass the address of index to helper function so that index is updated after every recursive call.
+5. Check  *index = vec.size , return nullptr
+6. Check vector value <lower_bound || >upperbound, return nullptr;
+7. Increment index.
+8. return unique_ptr<BSTNOde>(new BSTNode{vector value,
+											builTreeHelper(vec,lower_bound,vec[index],index
+											builTreeHelper(vec,vec[index],upper_bound,index)
+										 } 
+							  )
+
 
 -------------------------------------------------------------
-K LARGEST ELEMENTS IN BST:
+CONSTRUCTT MINIMAL HEIGHT BST TREE FROM A SORTED ARRAY
 -------------------------------------------------------------
-Create a vector to store the K elements.
-Use recursion as follows: recurse right, visit(node), recurse left,
-Remmeber to check the size of vector before making a call to right, and left
-Create a vector to store these values inside a func
-call  fn(root,vec,k)
-if()
+with start = 0; end  = vec.size(); 
+call buildTreeHelper(vector,start,end)
+
+
+
+-------------------------------------------------------------
+
+
+TOWER OF HANOII
+-------------------------------------------------------------
+The key observation is move e all other rings (n-1) except base ring src peg to helper peg.
+Then you push base ring to the destination peg.
+Push n-1 rings back from the helper peg to the destination peg.
+
+Do this until n>0
