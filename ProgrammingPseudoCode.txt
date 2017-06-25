@@ -1,7 +1,7 @@
 
-------------------------------------------------
+================================================
      1 .  ARRAYS
-------------------------------------------------
+================================================
 
 ------------------------------------------------
 REMOVING A SPECIFIC KEY from array in O(n) time and O(1) space
@@ -77,6 +77,8 @@ Eg. replace a with dd and remove all b
 - Then start from the end, and keep moving towards the start replacing all 
 occurences of a with 'dd'
 
+Remember Amazon Echo price reduction problem. remember to use ostringstream
+		
 ------------------------------------------------
 Phone number combo
 ------------------------------------------------
@@ -225,8 +227,9 @@ call buildTreeHelper(vector,start,end)
 
 
 
--------------------------------------------------------------
-
+================================================
+					RECURSION
+================================================
 
 TOWER OF HANOII
 -------------------------------------------------------------
