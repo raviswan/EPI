@@ -15,8 +15,8 @@ void mergeNodes(std::shared_ptr<Node<int>> *node, std::shared_ptr<Node<int>> *ta
 
 std::shared_ptr<Node<int>> mergeList(std::shared_ptr<Node<int>> list1, std::shared_ptr<Node<int>> list2){
 	
-	//std::shared_ptr<Node<int>> dummy_head(new Node<int>);
-	auto dummy_head(std::make_shared<Node<int>>());
+	std::shared_ptr<Node<int>> dummy_head(new Node<int>);
+	//auto dummy_head(std::make_shared<Node<int>>());
 	auto tail = dummy_head;
 
 	while(list1 && list2){
@@ -28,7 +28,7 @@ std::shared_ptr<Node<int>> mergeList(std::shared_ptr<Node<int>> list1, std::shar
 }
 
 
-int main(int argc, char const *argv[])
+int	 main(int argc, char const *argv[])
 {
 	/* code */
 	return 0;

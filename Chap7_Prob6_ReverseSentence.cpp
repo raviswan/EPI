@@ -13,7 +13,6 @@ void reverseSentence(string& s){
 		start = end+1;
 	}
 	reverse(s.begin()+start,s.end());
-
 }
 
 int main(){
@@ -23,8 +22,8 @@ int main(){
 	//v.push_back(string("Able was I, ere  i saw elba!"));
 	reverseSentence(s);
 	cout<<s<<endl;
-
 }
+
 
 
 

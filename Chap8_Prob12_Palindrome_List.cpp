@@ -13,11 +13,11 @@ bool checkListForPalindrome(std::shared_ptr<Node<int>> head){
 	auto slow = head;
 	auto fast = head;
 	while(fast!= nullptr && fast->next != nullptr){
-		slow=slow->next;
-		fast = slow->next;
+		fast = fast->next->next;
+		slow = slow->next;
 	}
 	
-	auto first_half= slow;
+	auto first_half= head;
 	auto second_half = reverseList(slow->next);
 	while(second_half  && first_half){
 		if(second_half->data != first_half->data)

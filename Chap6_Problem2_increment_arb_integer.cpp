@@ -11,7 +11,7 @@ vector<int> computeNextValue(vector<int> a){
 	if (a[0]==10) {
 		a[0] = 0;
 		a.insert(a.begin(),1);
-	}
+	}		
 	return a;
 }
 

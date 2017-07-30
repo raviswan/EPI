@@ -11,7 +11,6 @@ string runLengthEncoding(const string& s){
 	while(i < s.size()){
 		count = 1;
 		if(s[i] != s[i+1]){
-			cout<<s[i]<<" "<<s[i+1]<<endl;
 			result += std::to_string(count);
 			result += s[i];
 			++i;

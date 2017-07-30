@@ -23,3 +23,5 @@ int main(int argc, char** argv){
 	isPalindrome(s,0,s.size()-1)==true ? cout<<"true\n":cout<<"false\n";
 }
 
+
+palindromDecompse(s,start,)

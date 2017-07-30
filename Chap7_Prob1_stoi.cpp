@@ -24,8 +24,8 @@ int convertToInteger(string s){
 		res = res*26 + digit;
 	}
 	return res;
-
 }
+
 int main(){
 	string c("-1220");
 	cout<<stringToInteger(c)<<endl;
