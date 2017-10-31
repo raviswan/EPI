@@ -10,12 +10,12 @@ Here it is :
 The goal is to convert "column" word to "row" word
 Remember to create one extra row and one extran column
 If the two chars are equal, the box gets its left diagonal.
-Else it is 1+ max of (left OR top OR left-diagonal neighbor)
+Else it is 1+ MIN of (left OR top OR left-diagonal neighbor)
 
 regarding edits:
 Walking back from right corner, if you go up, you insert that "row" char into the "column" word.
 If you go left, you delete that char from the "column" word. If you move diagonally left, you substitute
-that "column" char grid[i][j] with "row" char of gridi][j]
+that "column" char grid[i][j] with "row" char of grid[i][j]
 */
 
 #include <iostream>
